@@ -120,7 +120,28 @@ class CodeWriter:
         Args:
             class_syntax: The class syntax to generate code for
         """
-        raise NotImplementedError()
+        self.current_class_name = class_syntax.name.value
+        self.class_symbols = {}
+        
+        static_index = 0
+        field_index = 0
+        
+        for var_dec in class_syntax.var_decs:
+            kind_of_string = var_dec.kind_keyword.value
+            kind = VarKind.from_str(kind_of_string)
+            type_name = var_dec.type_token.value
+            
+            for name_token in var_dec.names:
+                name = name_token.value
+                if kind == VarKind.STATIC:
+                    self.class_symbols[name] = VarInfo(name, type_name, kind, static_index)
+                    static_index += 1
+                elif kind == VarKind.FIELD:
+                    self.class_symbols[name] = VarInfo(name, type_name, kind, field_index)
+                    field_index += 1
+        
+        for subroutine in class_syntax.subroutines:
+            self.write_subroutine(subroutine)
 
     def write_subroutine(self, subroutine: SubroutineDecSyntax) -> None:
         """
