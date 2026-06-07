@@ -126,18 +126,18 @@ class CodeWriter:
         static_index = 0
         field_index = 0
         
-        for var_dec in class_syntax.var_decs:
-            kind_of_string = var_dec.kind_keyword.value
-            kind = VarKind.from_str(kind_of_string)
-            type_name = var_dec.type_token.value
+        for var_declaration in class_syntax.var_decs:
+            kind_value = var_declaration.kind_keyword.value
+            var_kind = VarKind.from_str(kind_value)
+            type_name = var_declaration.type_token.value
             
-            for name_token in var_dec.names:
+            for name_token in var_declaration.names:
                 name = name_token.value
-                if kind == VarKind.STATIC:
-                    self.class_symbols[name] = VarInfo(name, type_name, kind, static_index)
+                if var_kind == VarKind.STATIC:
+                    self.class_symbols[name] = VarInfo(name, type_name, var_kind, static_index)
                     static_index += 1
-                elif kind == VarKind.FIELD:
-                    self.class_symbols[name] = VarInfo(name, type_name, kind, field_index)
+                elif var_kind == VarKind.FIELD:
+                    self.class_symbols[name] = VarInfo(name, type_name, var_kind, field_index)
                     field_index += 1
         
         for subroutine in class_syntax.subroutines:
@@ -150,7 +150,47 @@ class CodeWriter:
         Args:
             subroutine: The subroutine syntax to generate code for
         """
-        raise NotImplementedError()
+        self.method_symbols = {}
+        
+        kind_of_string = subroutine.keyword.value
+        subroutine_name = subroutine.name.value
+
+        argument_index = 0
+        if kind_of_string == 'method':
+            argument_index = 1
+        
+        for parameter in subroutine.parameters.parameters:
+            name = parameter.name.value
+            type_name = parameter.type_token.value
+            self.method_symbols[name] = VarInfo(name, type_name, VarKind.ARGUMENT, argument_index)
+            argument_index += 1
+        
+        local_index = 0
+        for var_declaration in subroutine.body.var_decs:
+            type_name = var_declaration.type_token.value
+            for name_token in var_declaration.names:
+                name = name_token.value
+                self.method_symbols[name] = VarInfo(name, type_name, VarKind.LOCAL, local_index)
+                local_index += 1
+        
+        function_name = f"{self.current_class_name}.{subroutine_name}"
+        self.write(f"function {function_name} {local_index}")
+        
+        if kind_of_string == 'constructor':
+            amount_of_fields = 0
+            for var_info in self.class_symbols.values():
+                if var_info.kind == VarKind.FIELD:
+                    amount_of_fields += 1
+            
+            if amount_of_fields > 0:
+                self.write(f"push constant {amount_of_fields}")
+                self.write("call Memory.alloc 1")
+                self.write("pop pointer 0")
+        elif kind_of_string == 'method':
+            self.write("push argument 0")
+            self.write("pop pointer 0")
+            
+        self.write_statements(subroutine.body.statements)
 
     def write_statements(self, statements: StatementsSyntax) -> None:
         """
