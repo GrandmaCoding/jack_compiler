@@ -1,5 +1,5 @@
 from typing import Optional
-from .jack_token import JackToken
+from jack_token import JackToken
 
 class ExpectedException(Exception):
     """Exception raised when an unexpected token is encountered."""

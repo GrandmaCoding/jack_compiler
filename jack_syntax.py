@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Any, Tuple, Union
 
-from .jack_token import JackToken
+from jack_token import JackToken
 
 
 @dataclass

@@ -1,0 +1,61 @@
+class Main {
+    function void main() {
+        var int x, y;
+        var int drawMode; 
+        var int key;
+        var String message;
+
+        // Инициализация
+        let x = 256;
+        let y = 128;
+        let drawMode = 1;
+        do Screen.clearScreen();
+
+        // Главный цикл приложения
+        while (true) {
+            let key = Keyboard.keyPressed();
+
+            // WASD движение
+            if (key = 119) { let y = y - 4; } // W
+            if (key = 115) { let y = y + 4; } // S
+            if (key = 97)  { let x = x - 4; } // A
+            if (key = 100) { let x = x + 4; } // D
+
+            // Ограничение границами экрана (512x256)
+            if (x < 0)   { let x = 0; }
+            if (x > 511) { let x = 511; }
+            if (y < 0)   { let y = 0; }
+            if (y > 255) { let y = 255; }
+
+            // Переключение режима (Пробел)
+            if (key = 32) { let drawMode = 1 - drawMode; }
+
+            // Очистка (C) и Выход (Q)
+            if (key = 67)  { do Screen.clearScreen(); }
+            if (key = 81)  { do Sys.halt(); }
+
+            // Рисование/стирание
+            if (drawMode = 1) {
+                do Screen.setColor(true);  // Черный цвет
+            } else {
+                do Screen.setColor(false); // Белый цвет (стирание)
+            }
+            do Screen.drawPixel(x, y);
+
+
+            // Вывод текущего режима в угол экрана
+            do Output.moveCursor(0, 0);
+            if (drawMode = 1) {
+                let message = "DRAW  ";
+            } else {
+                let message = "ERASE ";
+            }
+            do Output.printString(message);
+            do message.dispose();
+
+            // Стабилизация частоты обновления
+            do Sys.wait(40);
+        }
+        return;
+    }
+}

@@ -1,0 +1,188 @@
+function Main.main 5
+push constant 256
+pop local 0
+push constant 128
+pop local 1
+push constant 1
+pop local 2
+call Screen.clearScreen 0
+pop temp 0
+label WHILE_EXP_0
+push constant 1
+neg
+not
+if-goto WHILE_END_1
+call Keyboard.keyPressed 0
+pop local 3
+push local 3
+push constant 119
+eq
+not
+if-goto IF_END_2
+push local 1
+push constant 4
+sub
+pop local 1
+label IF_END_2
+push local 3
+push constant 115
+eq
+not
+if-goto IF_END_3
+push local 1
+push constant 4
+add
+pop local 1
+label IF_END_3
+push local 3
+push constant 97
+eq
+not
+if-goto IF_END_4
+push local 0
+push constant 4
+sub
+pop local 0
+label IF_END_4
+push local 3
+push constant 100
+eq
+not
+if-goto IF_END_5
+push local 0
+push constant 4
+add
+pop local 0
+label IF_END_5
+push local 0
+push constant 0
+lt
+not
+if-goto IF_END_6
+push constant 0
+pop local 0
+label IF_END_6
+push local 0
+push constant 511
+gt
+not
+if-goto IF_END_7
+push constant 511
+pop local 0
+label IF_END_7
+push local 1
+push constant 0
+lt
+not
+if-goto IF_END_8
+push constant 0
+pop local 1
+label IF_END_8
+push local 1
+push constant 255
+gt
+not
+if-goto IF_END_9
+push constant 255
+pop local 1
+label IF_END_9
+push local 3
+push constant 32
+eq
+not
+if-goto IF_END_10
+push constant 1
+push local 2
+sub
+pop local 2
+label IF_END_10
+push local 3
+push constant 67
+eq
+not
+if-goto IF_END_11
+call Screen.clearScreen 0
+pop temp 0
+label IF_END_11
+push local 3
+push constant 81
+eq
+not
+if-goto IF_END_12
+call Sys.halt 0
+pop temp 0
+label IF_END_12
+push local 2
+push constant 1
+eq
+not
+if-goto IF_ELSE_13
+push constant 1
+neg
+call Screen.setColor 1
+pop temp 0
+goto IF_END_14
+label IF_ELSE_13
+push constant 0
+call Screen.setColor 1
+pop temp 0
+label IF_END_14
+push local 0
+push local 1
+call Screen.drawPixel 2
+pop temp 0
+push constant 0
+push constant 0
+call Output.moveCursor 2
+pop temp 0
+push local 2
+push constant 1
+eq
+not
+if-goto IF_ELSE_15
+push constant 6
+call String.new 1
+push constant 68
+call String.appendChar 2
+push constant 82
+call String.appendChar 2
+push constant 65
+call String.appendChar 2
+push constant 87
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+pop local 4
+goto IF_END_16
+label IF_ELSE_15
+push constant 6
+call String.new 1
+push constant 69
+call String.appendChar 2
+push constant 82
+call String.appendChar 2
+push constant 65
+call String.appendChar 2
+push constant 83
+call String.appendChar 2
+push constant 69
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+pop local 4
+label IF_END_16
+push local 4
+call Output.printString 1
+pop temp 0
+push local 4
+call String.dispose 1
+pop temp 0
+push constant 40
+call Sys.wait 1
+pop temp 0
+goto WHILE_EXP_0
+label WHILE_END_1
+push constant 0
+return

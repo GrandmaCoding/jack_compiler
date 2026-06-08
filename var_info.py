@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from .var_kind import VarKind
+from var_kind import VarKind
 
 
 @dataclass

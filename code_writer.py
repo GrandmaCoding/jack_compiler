@@ -1,8 +1,8 @@
 from typing import Dict, List, Optional
 
-from .var_info import VarInfo
-from .var_kind import VarKind
-from .jack_syntax import (
+from var_info import VarInfo
+from var_kind import VarKind
+from jack_syntax import (
     ClassSyntax, ClassVarDecSyntax, SubroutineDecSyntax, SubroutineBodySyntax,
     StatementsSyntax, LetStatementSyntax, IfStatementSyntax, WhileStatementSyntax,
     DoStatementSyntax, ReturnStatementSyntax, ExpressionSyntax, TermSyntax,
@@ -178,7 +178,6 @@ class CodeWriter:
             if vm_command:
                 self.write(vm_command)
 
-
     def write_term(self, term: TermSyntax) -> None:
         """
         Generate VM code for a term.
@@ -239,7 +238,6 @@ class CodeWriter:
             case SubroutineCallTerm(call=call):
                 self.write_subroutine_call(call)
 
-
     def write_subroutine_call(self, call: SubroutineCall) -> None:
         """
         Generate VM code for a subroutine call.
@@ -276,7 +274,6 @@ class CodeWriter:
         # Единая точка вызова
         self._write_subroutine_call_with_args(func_name, args, num_args)
 
-
     def _write_subroutine_call_with_args(self, func_name: str,
                                          args: ExpressionListSyntax,
                                          num_args: int) -> None:
@@ -284,7 +281,6 @@ class CodeWriter:
         for expression in args.expressions:
             self.write_expression(expression)
         self.write(f'call {func_name} {num_args}')
-
 
     def write_statements(self, statements: StatementsSyntax) -> None:
         """
@@ -298,7 +294,6 @@ class CodeWriter:
                 case WhileStatementSyntax():  self.write_while_statement(stmt)
                 case DoStatementSyntax():     self.write_do_statement(stmt)
                 case ReturnStatementSyntax(): self.write_return_statement(stmt)
-
 
     def write_let_statement(self, statement: LetStatementSyntax) -> None:
         """
@@ -334,7 +329,6 @@ class CodeWriter:
         self.write('push temp 0')    # Возвращаем значение выражения на стек
         self.write('pop that 0')     # Записываем в ячейку памяти
 
-
     def write_if_statement(self, statement: IfStatementSyntax) -> None:
         """
         Generate VM code for an if statement.
@@ -366,7 +360,6 @@ class CodeWriter:
             self.write_statements(statement.true_statements)
             self.write(f'label {end_label}')
 
-
     def write_while_statement(self, statement: WhileStatementSyntax) -> None:
         """
         Generate VM code for a while statement.
@@ -385,7 +378,6 @@ class CodeWriter:
         self.write(f'goto {exp_label}')
         self.write(f'label {end_label}')
 
-
     def write_do_statement(self, statement: DoStatementSyntax) -> None:
         """
         Generate VM code for a do statement.
@@ -393,7 +385,6 @@ class CodeWriter:
         """
         self.write_subroutine_call(statement.subroutine_call)
         self.write('pop temp 0')
-
 
     def write_return_statement(self, statement: ReturnStatementSyntax) -> None:
         """
@@ -408,4 +399,3 @@ class CodeWriter:
                 self.write_expression(expression)
                 
         self.write('return')
-
